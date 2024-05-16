@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar>
+      <q-toolbar class="custom-toolbar">
         <q-btn
           flat
           dense
@@ -11,7 +11,9 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title class="text-white"> Inicio </q-toolbar-title>
+        <q-toolbar-title class="text-white">
+          {{ pageTitle }}
+        </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
@@ -39,22 +41,19 @@
 
         <q-space />
 
-        <EssentialLink
-          title="Sair"
-          icon="exit_to_app"
-          link="/logout"
-        />
+        <EssentialLink title="Sair" icon="exit_to_app" link="/logout" />
       </q-list>
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <router-view :key="$route.fullPath" />
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useRoute } from "vue-router";
 import EssentialLink from "components/EssentialLink.vue";
 
 defineOptions({
@@ -65,17 +64,17 @@ const linksList = [
   {
     title: "Cursos",
     icon: "school",
-    link: "/cursos", 
+    link: "/cursos",
   },
   {
     title: "Professores",
-    icon: "people", 
-    link: '/professores', 
+    icon: "people",
+    link: "/professores",
   },
   {
     title: "Disciplina",
     icon: "book",
-    link: "/disciplina", 
+    link: "/disciplina",
   },
   {
     title: "Salas",
@@ -83,7 +82,7 @@ const linksList = [
     link: "/salas",
   },
   {
-    title: "Horario",
+    title: "Horário",
     icon: "schedule",
     link: "/horario",
   },
@@ -94,4 +93,31 @@ const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+
+const route = useRoute();
+
+const pageTitle = computed(() => {
+  switch (route.path) {
+    case "/cursos":
+      return "Cursos";
+    case "/novo-curso":
+      return "Novo Curso";
+    case "/professores":
+      return "Professores";
+    case "/disciplina":
+      return "Disciplina";
+    case "/salas":
+      return "Salas";
+    case "/horario":
+      return "Horário";
+    default:
+      return "Início";
+  }
+});
 </script>
+
+<style scoped>
+.custom-toolbar {
+  background-color: #A3C9AB; 
+}
+</style>

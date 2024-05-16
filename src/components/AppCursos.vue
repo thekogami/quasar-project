@@ -41,8 +41,26 @@ export default {
     },
     visualizarCurso(id) { 
       this.$router.push(`/visualizar-curso/${id}`);
-    }
-  }
+    },
+    async fetchData() {
+      // Implemente a lógica para recarregar os dados aqui
+      console.log("Recarregando dados...");
+    },
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      // Recarregar os dados aqui
+      vm.fetchData();
+    });
+  },
+  beforeRouteUpdate(to, from, next) {
+    // Recarregar os dados aqui
+    this.fetchData();
+    next();
+  },
+  created() {
+    this.fetchData();
+  },
 }
 </script>
 
