@@ -1,7 +1,18 @@
 <template>
   <div class="container">
-    <label for="nome" class="label-nome">Nome </label>
-    <input id="nome" v-model="nome" type="text" placeholder="Informe o nome">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#" @click.prevent="goToHome">Início</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="#" @click.prevent="goToCursos">Cursos</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Novo Curso</li>
+      </ol>
+    </nav>
+    <label for="nome" class="label-nome">Nome do curso: </label>
+    <input id="nome" v-model="nome" type="text" placeholder="Informe o nome" />
     <div class="button-group">
       <button class="cancelar" @click="cancelar">Cancelar</button>
       <button class="salvar" @click="salvar">Salvar</button>
@@ -12,38 +23,76 @@
 
 <script>
 export default {
-  name: 'AppNovoCurso',
+  name: "AppNovoCurso",
   data() {
     return {
-      nome: ''
-    }
+      nome: "",
+    };
   },
   methods: {
+    goToHome() {
+      this.$router.push("/");
+    },
+    goToCursos() {
+      this.$router.push("/cursos");
+    },
+    novoCurso() {
+      this.$router.push("/novo-curso");
+    },
     cancelar() {
-      this.$router.push('/cursos');
+      this.$router.push("/cursos");
     },
     salvar() {
       // Aqui você pode adicionar a lógica para salvar o novo curso
     },
     excluir() {
       // Aqui você pode adicionar a lógica para excluir o curso
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
 .container {
-  font-family: 'San Francisco', sans-serif;
+  font-family: "San Francisco", sans-serif;
   color: #333;
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
+  text-align: left;
+}
+
+.breadcrumb {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  font-size: 13px;
+  color: #8e8e93;
+}
+
+.breadcrumb-item {
+  margin-right: 5px;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: ">";
+  padding: 0 5px;
+  color: #8e8e93;
+}
+
+.breadcrumb-item a {
+  color: #8e8e93;
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  text-decoration: underline;
 }
 
 .label-nome {
-  font-weight: bold; /* Faz a palavra "Nome" aparecer em negrito */
-  font-size: 20px; /* Faz a palavra "Nome" aparecer maior */
+  font-weight: bold;
+  font-size: 20px;
 }
 
 input {
@@ -57,10 +106,21 @@ input {
 
 .button-group {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  margin-top: 5px;
 }
 
-.salvar, .cancelar, .excluir {
+.button-group > * {
+  margin-right: 1cm; /* Adiciona uma margem à direita de 2cm a cada botão */
+}
+
+.button-group > *:last-child {
+  margin-right: 0; /* Remove a margem à direita do último botão */
+}
+
+.salvar,
+.cancelar,
+.excluir {
   padding: 10px 20px;
   font-size: 16px;
   border-radius: 9px;
@@ -70,14 +130,14 @@ input {
 }
 
 .salvar {
-  background-color: #007AFF;
+  background-color: #007aff;
 }
 
 .cancelar {
-  background-color: #A3A3A3;
+  background-color: #a3a3a3;
 }
 
 .excluir {
-  background-color: #FF3B30;
+  background-color: #ff3b30;
 }
 </style>
