@@ -64,8 +64,8 @@ export default {
     editarCurso(id) {
       this.$router.push(`/editar-curso/${id}`);
     },
-    visualizarCurso(id) { 
-      this.$router.push(`/visualizar-curso/${id}`);
+    visualizarCurso(curso) { 
+      this.$router.push({ path: `/visualizar-curso/${curso.id}`, params: { curso: curso } });
     },
     async fetchData() {
       console.log("Recarregando dados...");
