@@ -16,7 +16,6 @@
     <div class="button-group">
       <button class="cancelar" @click="cancelar">Cancelar</button>
       <button class="salvar" @click="salvar">Salvar</button>
-      <button class="excluir" @click="excluir">Excluir</button>
     </div>
   </div>
 </template>
@@ -44,9 +43,6 @@ export default {
     },
     salvar() {
       // Aqui você pode adicionar a lógica para salvar o novo curso
-    },
-    excluir() {
-      // Aqui você pode adicionar a lógica para excluir o curso
     },
   },
 };

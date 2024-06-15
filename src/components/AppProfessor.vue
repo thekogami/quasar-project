@@ -1,17 +1,41 @@
 <template>
   <div>
     <h2 v-if="professor">{{ professor.nome }}</h2>
-    <button class="novo-professor" @click="novoProfessor">Novo</button>
-    <button v-if="professor" @click="editarProfessor(professor.id)">Editar</button>
-    <button v-if="professor" @click="visualizarProfessor(professor.id)">Visualizar</button>
-
-    <div v-if="professores.length">
-      <h3>Professores cadastrados:</h3>
-      <ul>
-        <li v-for="(professor, index) in professores" :key="index">
-          {{ professor.nome }}
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#" @click.prevent="goToHome">Início</a>
         </li>
-      </ul>
+        <li class="breadcrumb-item active" aria-current="page">Professores</li>
+      </ol>
+    </nav>
+
+    <div class="table-container" v-if="professores.length">
+      <button class="novo-professor" @click="novoProfessor">Novo</button>
+      <table class="professores-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="professor-row"
+            v-for="(professor, index) in professores"
+            :key="index"
+          >
+            <td>{{ professor.id }}</td>
+            <td>{{ professor.nome }}</td>
+            <td>
+              <button @click="visualizarProfessor(professor.id)">
+                Visualizar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div v-else>
       <h3>Nenhum professor cadastrado.</h3>
@@ -21,57 +45,118 @@
 
 <script>
 export default {
-  name: 'AppProfessor',
+  name: "AppProfessores",
   props: {
     professor: {
       type: Object,
-    }
+    },
   },
   data() {
     return {
-      professores: []
-    }
+      professores: [{ id: 1, nome: "Leandrim" }],
+    };
   },
   methods: {
+    goToHome() {
+      this.$router.push("/");
+    },
+    goToProfessores() {
+      this.$router.push("/professores");
+    },
     novoProfessor() {
-      this.$router.push('/novo-professor');
+      this.$router.push("/novo-professor");
     },
     editarProfessor(id) {
       this.$router.push(`/editar-professor/${id}`);
     },
-    visualizarProfessor(id) { 
-      this.$router.push(`/visualizar-professor/${id}`);
+    visualizarProfessor(professor) {
+      this.$router.push({
+        path: `/visualizar-professor/${professor.id}`,
+        params: { professor: professor },
+      });
     },
     async fetchData() {
-      // Implemente a lógica para recarregar os dados aqui
       console.log("Recarregando dados...");
     },
   },
   beforeRouteEnter(to, from, next) {
-    next(vm => {
-      // Recarregar os dados aqui
+    next((vm) => {
       vm.fetchData();
     });
   },
   beforeRouteUpdate(to, from, next) {
-    // Recarregar os dados aqui
     this.fetchData();
     next();
   },
   created() {
     this.fetchData();
   },
-}
+};
 </script>
 
 <style scoped>
 .novo-professor {
-  background-color: #6495ED;
+  background-color: #6495ed;
   color: white;
-  float: right;
-  padding: 10px 20px; /* Aumenta o tamanho do botão */
-  font-size: 16px; /* Aumenta o tamanho do texto */
-  border-radius: 9px; /* Arredonda as pontas do botão */
-  margin-right: 60px; /* Move o botão 60 pixels para a esquerda */
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 9px;
+  margin-bottom: 10px;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.professores-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.professores-table th,
+.professores-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  font-size: 18px;
+}
+
+.professores-table th {
+  background-color: #f2f2f2;
+}
+
+.professor-row {
+  background-color: #f2f2f2;
+}
+
+.breadcrumb {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  font-size: 13px;
+  color: #8e8e93;
+}
+
+.breadcrumb-item {
+  margin-right: 5px;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: ">";
+  padding: 0 5px;
+  color: #8e8e93;
+}
+
+.breadcrumb-item a {
+  color: #8e8e93;
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  text-decoration: underline;
 }
 </style>
