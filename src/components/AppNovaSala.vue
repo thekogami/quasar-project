@@ -6,12 +6,12 @@
           <a href="#" @click.prevent="goToHome">Início</a>
         </li>
         <li class="breadcrumb-item">
-          <a href="#" @click.prevent="goToCursos">Cursos</a>
+          <a href="#" @click.prevent="goToSalas">Salas</a>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">Novo Curso</li>
+        <li class="breadcrumb-item active" aria-current="page">Nova Sala</li>
       </ol>
     </nav>
-    <label for="nome" class="label-nome">Nome do curso: </label>
+    <label for="nome" class="label-nome">Nome da sala: </label>
     <input id="nome" v-model="nome" type="text" placeholder="Informe o nome" />
     <div class="button-group">
       <button class="cancelar" @click="cancelar">Cancelar</button>
@@ -24,7 +24,7 @@
 import axios from "axios";
 
 export default {
-  name: "AppNovoCurso",
+  name: "AppNovaSala",
   data() {
     return {
       nome: "",
@@ -34,20 +34,21 @@ export default {
     goToHome() {
       this.$router.push("/");
     },
-    goToCursos() {
-      this.$router.push("/cursos");
+    goToSalas() {
+      this.$router.push("/salas");
     },
     cancelar() {
-      this.$router.push("/cursos");
+      this.$router.push("/salas");
     },
     salvar() {
       axios
-        .post("http://localhost:8080/inicio/cursos/novo-curso", {
+        .post("http://localhost:8080/inicio/salas/nova-sala", {
           nome: this.nome,
         })
         .then((response) => {
           console.log(response.data);
-          this.$router.push("/cursos"); // Alterado para redirecionar para a lista de cursos
+          this.fetchData(); // Atualiza a lista de salas
+          this.$router.push("/salas");
         })
         .catch((error) => {
           console.error(error);
@@ -95,7 +96,9 @@ export default {
   text-decoration: underline;
 }
 
-.label-nome {
+.label-nome,
+.label-sobrenome,
+.label-email {
   font-weight: bold;
   font-size: 20px;
   margin-top: 10px;

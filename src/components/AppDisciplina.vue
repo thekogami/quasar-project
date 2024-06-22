@@ -10,7 +10,7 @@
       </ol>
     </nav>
 
-    <div class="table-container" v-if="disciplinas.length">
+    <div class="table-container">
       <button class="nova-disciplina" @click="novaDisciplina">Nova</button>
       <table class="disciplinas-table">
         <thead>
@@ -34,16 +34,18 @@
               </button>
             </td>
           </tr>
+          <tr v-if="!disciplinas.length">
+            <td colspan="3">Nenhuma disciplina cadastrada.</td>
+          </tr>
         </tbody>
       </table>
-    </div>
-    <div v-else>
-      <h3>Nenhuma disciplina cadastrada.</h3>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "AppDisciplinas",
   props: {
@@ -53,7 +55,10 @@ export default {
   },
   data() {
     return {
-      disciplinas: [{ id: 1, nome: "Matemática" }],
+      disciplinas: [
+        { id: 1, nome: 'Programação Orientada à Objetos II' },
+        { id: 2, nome: 'Matematica Discreta' }
+      ],
     };
   },
   methods: {
@@ -76,7 +81,19 @@ export default {
       });
     },
     async fetchData() {
-      console.log("Recarregando dados...");
+      try {
+        const response = await axios.get("http://localhost:8080/inicio/disciplinas");
+        this.disciplinas = response.data;
+
+        if (this.disciplinas.length === 0) {
+          this.disciplinas = [
+            { id: 1, nome: 'Programação Orientada à Objetos II' },
+            { id: 2, nome: 'Matematica Discreta' }
+          ];
+        }
+      } catch (error) {
+        console.error("Erro ao buscar disciplinas:", error);
+      }
     },
   },
   beforeRouteEnter(to, from, next) {

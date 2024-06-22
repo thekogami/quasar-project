@@ -3,12 +3,14 @@
     <h2 v-if="curso">{{ curso.nome }}</h2>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#" @click.prevent="goToHome">Início</a></li>
+        <li class="breadcrumb-item">
+          <a href="#" @click.prevent="goToHome">Início</a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">Cursos</li>
       </ol>
     </nav>
 
-    <div class="table-container" v-if="cursos.length">
+    <div class="table-container">
       <button class="novo-curso" @click="novoCurso">Novo</button>
       <table class="cursos-table">
         <thead>
@@ -26,53 +28,60 @@
               <button @click="visualizarCurso(curso.id)">Visualizar</button>
             </td>
           </tr>
+          <tr v-if="!cursos.length">
+            <td colspan="3">Nenhum curso cadastrado.</td>
+          </tr>
         </tbody>
       </table>
-    </div>
-    <div v-else>
-      <h3>Nenhum curso cadastrado.</h3>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: 'AppCursos',
+  name: "AppCursos",
   props: {
     curso: {
       type: Object,
-    }
+    },
   },
   data() {
     return {
-      cursos: [
-        { id: 1, nome: 'Bacharelado em Engenharia de Software' },
-        { id: 2, nome: 'Bacharelado em Sistemas de Informação' }
-      ]
-    }
+      cursos: [],
+    };
   },
   methods: {
-    goToHome() {
-      this.$router.push('/');
-    },
-    goToCursos() {
-      this.$router.push('/cursos');
-    },
     novoCurso() {
-      this.$router.push('/novo-curso');
+      this.$router.push("/novo-curso");
     },
-    editarCurso(id) {
-      this.$router.push(`/editar-curso/${id}`);
+    visualizarCurso(id) {
+      axios
+        .get(`http://localhost:8080/inicio/cursos/${id}`)
+        .then((response) => {
+          this.$router.push({
+            path: `/visualizar-curso/${id}`,
+            params: { curso: response.data },
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
-    visualizarCurso(curso) { 
-      this.$router.push({ path: `/visualizar-curso/${curso.id}`, params: { curso: curso } });
-    },
-    async fetchData() {
-      console.log("Recarregando dados...");
+    fetchData() {
+      axios
+        .get("http://localhost:8080/inicio/cursos")
+        .then((response) => {
+          this.cursos = response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
   beforeRouteEnter(to, from, next) {
-    next(vm => {
+    next((vm) => {
       vm.fetchData();
     });
   },
@@ -83,12 +92,12 @@ export default {
   created() {
     this.fetchData();
   },
-}
+};
 </script>
 
 <style scoped>
 .novo-curso {
-  background-color: #6495ED;
+  background-color: #6495ed;
   color: white;
   padding: 10px 20px;
   font-size: 16px;
@@ -108,7 +117,8 @@ export default {
   margin-top: 10px;
 }
 
-.cursos-table th, .cursos-table td {
+.cursos-table th,
+.cursos-table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;

@@ -10,13 +10,15 @@
       </ol>
     </nav>
 
-    <div class="table-container" v-if="professores.length">
+    <div class="table-container">
       <button class="novo-professor" @click="novoProfessor">Novo</button>
       <table class="professores-table">
         <thead>
           <tr>
             <th>ID</th>
             <th>Nome</th>
+            <th>Sobrenome</th>
+            <th>Email</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -28,22 +30,26 @@
           >
             <td>{{ professor.id }}</td>
             <td>{{ professor.nome }}</td>
+            <td>{{ professor.sobrenome }}</td>
+            <td>{{ professor.email }}</td>
             <td>
               <button @click="visualizarProfessor(professor.id)">
                 Visualizar
               </button>
             </td>
           </tr>
+          <tr v-if="!professores.length">
+            <td colspan="5">Nenhum professor cadastrado.</td>
+          </tr>
         </tbody>
       </table>
-    </div>
-    <div v-else>
-      <h3>Nenhum professor cadastrado.</h3>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "AppProfessores",
   props: {
@@ -53,21 +59,12 @@ export default {
   },
   data() {
     return {
-      professores: [{ id: 1, nome: "Leandrim" }],
+      professores: [],
     };
   },
   methods: {
-    goToHome() {
-      this.$router.push("/");
-    },
-    goToProfessores() {
-      this.$router.push("/professores");
-    },
     novoProfessor() {
       this.$router.push("/novo-professor");
-    },
-    editarProfessor(id) {
-      this.$router.push(`/editar-professor/${id}`);
     },
     visualizarProfessor(professor) {
       this.$router.push({
@@ -76,7 +73,12 @@ export default {
       });
     },
     async fetchData() {
-      console.log("Recarregando dados...");
+      try {
+        const response = await axios.get("http://localhost:8080/inicio/professores");
+        this.professores = response.data;
+      } catch (error) {
+        console.error("Erro ao carregar professores:", error);
+      }
     },
   },
   beforeRouteEnter(to, from, next) {

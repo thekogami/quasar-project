@@ -6,13 +6,31 @@
           <a href="#" @click.prevent="goToHome">Início</a>
         </li>
         <li class="breadcrumb-item">
-          <a href="#" @click.prevent="goToCursos">Cursos</a>
+          <a href="#" @click.prevent="goToProfessores">Professores</a>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">Novo Curso</li>
+        <li class="breadcrumb-item active" aria-current="page">
+          Novo Professor
+        </li>
       </ol>
     </nav>
-    <label for="nome" class="label-nome">Nome do curso: </label>
+    <label for="nome" class="label-nome">Nome do professor: </label>
     <input id="nome" v-model="nome" type="text" placeholder="Informe o nome" />
+    <label for="sobrenome" class="label-sobrenome"
+      >Sobrenome do professor:
+    </label>
+    <input
+      id="sobrenome"
+      v-model="sobrenome"
+      type="text"
+      placeholder="Informe o sobrenome"
+    />
+    <label for="email" class="label-email">Email do professor: </label>
+    <input
+      id="email"
+      v-model="email"
+      type="text"
+      placeholder="Informe o email"
+    />
     <div class="button-group">
       <button class="cancelar" @click="cancelar">Cancelar</button>
       <button class="salvar" @click="salvar">Salvar</button>
@@ -24,30 +42,34 @@
 import axios from "axios";
 
 export default {
-  name: "AppNovoCurso",
+  name: "AppNovoProfessor",
   data() {
     return {
       nome: "",
+      sobrenome: "",
+      email: "",
     };
   },
   methods: {
     goToHome() {
       this.$router.push("/");
     },
-    goToCursos() {
-      this.$router.push("/cursos");
+    goToProfessores() {
+      this.$router.push("/professores");
     },
     cancelar() {
-      this.$router.push("/cursos");
+      this.$router.push("/professores");
     },
     salvar() {
       axios
-        .post("http://localhost:8080/inicio/cursos/novo-curso", {
+        .post("http://localhost:8080/inicio/professores/novo-professor", {
           nome: this.nome,
+          sobrenome: this.sobrenome,
+          email: this.email,
         })
         .then((response) => {
           console.log(response.data);
-          this.$router.push("/cursos"); // Alterado para redirecionar para a lista de cursos
+          this.$router.push("/professores"); // Alterado para redirecionar para a lista de professores
         })
         .catch((error) => {
           console.error(error);
@@ -95,7 +117,9 @@ export default {
   text-decoration: underline;
 }
 
-.label-nome {
+.label-nome,
+.label-sobrenome,
+.label-email {
   font-weight: bold;
   font-size: 20px;
   margin-top: 10px;

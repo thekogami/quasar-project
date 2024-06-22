@@ -86,6 +86,11 @@ const linksList = [
     icon: "schedule",
     link: "/horario",
   },
+  {
+    title: "Turma",
+    icon: "group",
+    link: "/turma",
+  },
 ];
 
 const leftDrawerOpen = ref(false);
@@ -104,12 +109,16 @@ const pageTitle = computed(() => {
       return "Novo Curso";
     case "/professores":
       return "Professores";
+    case "/novo-professor":
+      return "Novo Professor";
     case "/disciplina":
       return "Disciplina";
     case "/salas":
       return "Salas";
     case "/horario":
       return "Horário";
+    case "/turma":
+      return "Turma";
     default:
       return "Início";
   }
@@ -118,6 +127,6 @@ const pageTitle = computed(() => {
 
 <style scoped>
 .custom-toolbar {
-  background-color: #A3C9AB; 
+  background-color: #a3c9ab;
 }
 </style>

@@ -10,7 +10,7 @@
       </ol>
     </nav>
 
-    <div class="table-container" v-if="salas.length">
+    <div class="table-container">
       <button class="nova-sala" @click="novaSala">Nova</button>
       <table class="salas-table">
         <thead>
@@ -28,11 +28,11 @@
               <button @click="visualizarSala(sala.id)">Visualizar</button>
             </td>
           </tr>
+          <tr v-if="!salas.length">
+            <td colspan="3">Nenhuma sala cadastrada.</td>
+          </tr>
         </tbody>
       </table>
-    </div>
-    <div v-else>
-      <h3>Nenhuma sala cadastrada.</h3>
     </div>
   </div>
 </template>
@@ -47,7 +47,7 @@ export default {
   },
   data() {
     return {
-      salas: [{ id: 1, numSala: "101" }],
+      salas: [],
     };
   },
   methods: {
@@ -70,7 +70,12 @@ export default {
       });
     },
     async fetchData() {
-      console.log("Recarregando dados...");
+      try {
+        const response = await yourService.getSalas();
+        this.salas = response.data;
+      } catch (error) {
+        console.error("An error occurred while fetching the data:", error);
+      }
     },
   },
   beforeRouteEnter(to, from, next) {

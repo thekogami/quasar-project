@@ -7,6 +7,10 @@ import AppHorario from 'components/AppGradeHoraria.vue';
 import AppEditarCurso from 'components/AppEditarCurso.vue';
 import AppVisualizarCurso from 'components/AppVisualizarCurso.vue';
 import AppNovoCurso from 'src/components/AppNovoCurso.vue';
+import AppTurma from 'components/AppTurma.vue';
+import AppNovoProfessor from 'components/AppNovoProfessor.vue';
+import AppNovaSala from 'src/components/AppNovaSala.vue';
+
 
 const routes = [
   {
@@ -22,6 +26,14 @@ const routes = [
       { path: '/editar-curso/:id', component: AppEditarCurso },
       { path: '/visualizar-curso/:id', component: AppVisualizarCurso },
       { path: '/novo-curso', component: AppNovoCurso },
+      { path: '/editar-curso', component: AppEditarCurso },
+      { path: '/editar-professor', component: AppProfessores },
+      { path: '/editar-disciplina', component: AppDisciplina },
+      { path: '/editar-sala', component: AppSalas },
+      { path: '/editar-horario', component: AppHorario },
+      { path: '/turma', component: AppTurma },
+      { path: '/novo-professor', component: AppNovoProfessor },
+      { path: '/nova-sala', component: AppNovaSala },
     ]
   },
  
